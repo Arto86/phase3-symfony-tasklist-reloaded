@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier la tâche{% endblock %}
+
+{% block body %}
+<div class="max-w-3xl mx-auto p-10">
+    {# Bouton de retour #}
+    <a href="{{ path('app_task_index') }}" class="text-sm text-gray-400 hover:text-gray-900 transition-colors mb-6 flex items-center">
+        <i class="bi bi-arrow-left mr-2"></i> Retour à la liste
+    </a>
+
+    {# Carte de formulaire #}
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-8">Modifier la tâche</h1>
+
+        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+            
+            {# Titre #}
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Titre</label>
+                {{ form_widget(form.title, {
+                    'attr': {
+                        'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none transition-all',
+                        'placeholder': 'Nom de la tâche'
+                    }
+                }) }}
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Statut</label>
+                    {{ form_widget(form.status, {
+                        'attr': {'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none'}
+                    }) }}
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Priorité</label>
+                    {{ form_widget(form.priority, {
+                        'attr': {'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none'}
+                    }) }}
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Dossier</label>
+                {{ form_widget(form.folder, {
+                    'attr': {'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none'}
+                }) }}
+            </div>
+
+            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl border border-transparent hover:border-gray-200 transition-all cursor-pointer group">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 flex items-center justify-center rounded-lg bg-white shadow-sm">
+                        <i class="bi bi-pin-angle text-gray-400 group-hover:text-yellow-500 transition-colors"></i>
+                    </div>
+                    <div>
+                        <label for="{{ form.isPinned.vars.id }}" class="block text-sm font-bold text-gray-900 cursor-pointer">
+                            Épingler la tâche
+                        </label>
+                        <p class="text-[11px] text-gray-400 uppercase tracking-wider font-medium">Priorité haute en haut de liste</p>
+                    </div>
+                </div>
+
+                <div class="relative inline-flex items-center cursor-pointer">
+                    {{ form_widget(form.isPinned, {
+                        'attr': {
+                            'class': 'w-5 h-5 rounded border-gray-300 text-[#080915] focus:ring-[#080915] cursor-pointer'
+                        }
+                    }) }}
+                </div>
+            </div>
+
+            {# Actions #}
+            <div class="flex items-center justify-between pt-6 border-t border-gray-50">
+                <button type="submit" class="bg-[#080915] text-white font-bold py-3 px-6 rounded-xl hover:bg-black transition-all text-sm active:scale-[0.98]">
+                    Enregistrer les modifications
+                </button>
+
+                <button type="button" class="text-red-500 text-sm font-medium hover:text-red-700 transition-colors" onclick="document.getElementById('delete-form').submit();">
+                    Supprimer
+                </button>
+            </div>
+        {{ form_end(form) }}
+
+        <form id="delete-form" action="{{ path('app_task_delete', {'id': task.id}) }}" method="POST" class="hidden">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ task.id) }}">
+        </form>
+    </div>
+</div>
+{% endblock %}

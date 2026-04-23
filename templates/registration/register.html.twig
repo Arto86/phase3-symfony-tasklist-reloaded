@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block auth_content %}
+<div class="bg-white rounded-[20px] p-8 shadow-sm w-full max-w-[440px]">
+    <div class="mb-6">
+        <h1 class="text-xl font-bold text-gray-900">Gestion de Tâches</h1>
+        <p class="text-gray-400 text-sm">Organisez votre journée efficacement</p>
+    </div>
+
+    {# Tab Switcher : Ici "Inscription" est actif #}
+    <div class="flex p-1 bg-gray-100 rounded-full mb-8">
+        <a href="{{ path('app_login') }}" class="flex-1 py-2 text-sm font-medium text-center text-gray-400 hover:text-gray-600 transition-colors">Connexion</a>
+        <div class="flex-1 bg-white shadow-sm rounded-full py-2 text-sm font-bold text-center text-gray-900">Inscription</div>
+    </div>
+
+    {{ form_start(registrationForm, {'attr': {'class': 'space-y-5'}}) }}
+        
+        {# Champ Email #}
+        <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Email</label>
+            {{ form_widget(registrationForm.email, {
+                'attr': {
+                    'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none transition-all',
+                    'placeholder': 'votre@email.com'
+                }
+            }) }}
+            <div class="text-red-500 text-xs mt-1 italic">{{ form_errors(registrationForm.email) }}</div>
+        </div>
+
+        {# Champ Nom d'utilisateur #}
+        <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Nom d'utilisateur</label>
+            {# Assure-toi que ce champ existe dans ton RegistrationFormType.php #}
+            {{ form_widget(registrationForm.username, {
+                'attr': {
+                    'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none transition-all',
+                    'placeholder': 'nom_utilisateur'
+                }
+            }) }}
+            <div class="text-red-500 text-xs mt-1 italic">{{ form_errors(registrationForm.username) }}</div>
+        </div>
+        
+        {# Champ Mot de passe #}
+        <div>
+            <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Mot de passe</label>
+            {{ form_widget(registrationForm.plainPassword, {
+                'attr': {
+                    'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none transition-all',
+                    'placeholder': '********'
+                }
+            }) }}
+            <div class="text-red-500 text-xs mt-1 italic">{{ form_errors(registrationForm.plainPassword) }}</div>
+        </div>
+
+        {# Bouton Submit #}
+        <button type="submit" class="w-full bg-[#080915] text-white font-bold py-3 rounded-xl hover:bg-black transition-all text-sm mt-4 active:scale-[0.98]">
+            S'inscrire
+        </button>
+
+    {{ form_end(registrationForm) }}
+</div>
+{% endblock %}

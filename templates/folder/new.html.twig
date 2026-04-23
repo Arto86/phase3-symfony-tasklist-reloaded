@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Dossier{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto p-10">
+    <a href="{{ path('app_task_index') }}" class="text-sm text-gray-400 hover:text-gray-900 transition-colors mb-6 flex items-center">
+        <i class="bi bi-arrow-left mr-2"></i> Retour au tableau de bord
+    </a>
+
+    <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Créer un dossier</h1>
+        <p class="text-gray-400 text-sm mb-8">Regroupez vos tâches par thématique.</p>
+
+        {{ form_start(form, {'attr': {'class': 'space-y-6'}}) }}
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Nom du dossier</label>
+                {{ form_widget(form.name, {
+                    'attr': {
+                        'class': 'w-full bg-gray-50 border-none rounded-xl p-3 text-sm focus:ring-2 focus:ring-gray-200 outline-none transition-all',
+                        'placeholder': 'ex: Projets Clients, Personnel...'
+                    }
+                }) }}
+            </div>
+
+            {# Si tu as ajouté un champ couleur dans ton entité Folder #}
+            {% if form.color is defined %}
+            <div>
+                <label class="block text-xs font-bold text-gray-700 uppercase mb-2">Couleur distinctive</label>
+                {{ form_widget(form.color, {
+                    'attr': {'class': 'w-full h-10 border-none rounded-lg cursor-pointer bg-gray-50'}
+                }) }}
+            </div>
+            {% endif %}
+
+            <div class="pt-6 border-t border-gray-50">
+                <button type="submit" class="w-full bg-[#080915] text-white font-bold py-3 rounded-xl hover:bg-black transition-all text-sm">
+                    Créer le dossier
+                </button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="p-10">
+    {# Header #}
+    <div class="flex justify-between items-start mb-10">
+        <div>
+            <h1 class="text-3xl font-bold text-gray-900">Gestion de Tâches</h1>
+            <p class="text-gray-400 text-sm">Organisez votre journée efficacement</p>
+        </div>
+        <div class="flex gap-3">
+            <button class="px-4 py-2 text-sm font-medium border rounded-lg hover:bg-gray-50">Gérer les
+                priorités</button>
+            <a href="{{ path('app_task_new') }}"
+                class="px-4 py-2 text-sm font-bold bg-[#080915] text-white rounded-lg hover:bg-black flex items-center">
+                <i class="bi bi-plus-lg mr-2"></i> Nouvelle tâche
+            </a>
+        </div>
+    </div>
+
+    {# Filtres #}
+    <form method="GET" action="{{ path('app_task_index') }}"
+        class="flex items-center bg-gray-50 rounded-xl p-1 w-fit mb-12 border border-gray-100">
+        <div class="px-4 text-xs font-bold text-gray-400 border-r py-2">
+            <i class="bi bi-filter mr-1"></i> FILTRES :
+        </div>
+
+        <div class="px-4 py-2 flex items-center">
+            <span class="text-xs text-gray-400 mr-2">Statut</span>
+            <select name="status" onchange="this.form.submit()"
+                class="bg-transparent text-sm font-semibold outline-none border-none p-0 cursor-pointer">
+                <option value="" {% if app.request.query.get('status') is empty %}selected{% endif %}>Tous</option>
+                <option value="Pending" {% if app.request.query.get('status')=='en cours' %}selected{% endif %}>En
+                    cours</option>
+                <option value="Completed" {% if app.request.query.get('status')=='terminée' %}selected{% endif %}>
+                    Terminée</option>
+                <option value="Archived" {% if app.request.query.get('status')=='archivée' %}selected{% endif %}>
+                    Archivée</option>
+            </select>
+        </div>
+
+        <div class="px-4 py-2 flex items-center border-l">
+            <span class="text-xs text-gray-400 mr-2">Priorité</span>
+            <select name="priority" onchange="this.form.submit()"
+                class="bg-transparent text-sm font-semibold outline-none border-none p-0 cursor-pointer">
+                <option value="">Toutes</option>
+                <option value="3" {% if app.request.query.get('priority')=='3' %}selected{% endif %}>Urgent</option>
+                <option value="2" {% if app.request.query.get('priority')=='2' %}selected{% endif %}>Important</option>
+                <option value="1" {% if app.request.query.get('priority')=='1' %}selected{% endif %}>Normal</option>
+            </select>
+        </div>
+
+        {% if app.request.query.get('status') or app.request.query.get('priority') %}
+        <a href="{{ path('app_task_index') }}" class="ml-4 text-xs font-bold text-red-500 hover:underline uppercase">
+            <i class="bi bi-x-circle mr-1"></i> Effacer les filtres
+        </a>
+        {% endif %}
+        
+    </form>
+
+    {# Task List #}
+    <div class="space-y-4">
+        {% for task in tasks %}
+        <div
+            class="group flex items-center p-4 bg-white border border-gray-100 rounded-2xl shadow-sm hover:border-gray-300 transition-all">
+            <input type="checkbox"
+                class="w-5 h-5 rounded-md border-gray-300 text-[#080915] focus:ring-0 mr-4 cursor-pointer">
+
+            <div class="flex-1">
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-gray-900">{{ task.title }}</span>
+                    <span
+                        class="px-2 py-0.5 text-[10px] font-bold uppercase rounded-full bg-blue-50 text-blue-500 border border-blue-100">
+                        {{ task.priority.name|default('normal') }}
+                    </span>
+                </div>
+                <span class="text-xs text-gray-400">{{ task.status.name|default('En cours') }}</span>
+            </div>
+
+            <div class="opacity-0 group-hover:opacity-100 transition-opacity">
+                <a href="{{ path('app_task_edit', {id: task.id}) }}" class="text-gray-400 hover:text-gray-900">
+                    <i class="bi bi-pencil-square"></i>
+                </a>
+            </div>
+            <div class="ml-4 text-gray-300">
+                <a href="{{ path('app_task_pin', {id: task.id}) }}" class="text-gray-400 hover:text-gray-900">
+                    <i class="bi bi-pin-angle"></i>
+                </a>
+            </div>
+        </div>
+        {% else %}
+        <div class="text-center py-20 border-2 border-dashed border-gray-100 rounded-3xl">
+            <p class="text-gray-400 italic">Aucune tâche prévue. Prenez un café !</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
